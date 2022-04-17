@@ -21,7 +21,15 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 RUN apt-get update -y
 RUN apt-get install -y google-chrome-stable
-
+RUN apt-get install -y \
+    fontconfig \
+    fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
+    fonts-thai-tlwg \
+    fonts-kacst \
+    fonts-symbola \
+    fonts-noto \
+    fonts-freefont-ttf
 
 
 # Set up Chromedriver Environment variables
@@ -34,9 +42,13 @@ RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googlea
 RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
 RUN  chmod 777 /chromedriver/chromedriver
 
-ENV PATH="/chromedriver:${PATH}"
 
+EXPOSE 9222
+EXPOSE 80
+
+ENV PATH="/chromedriver:${PATH}"
 
 ENTRYPOINT python $PYTHON_SCRIPT
 
-EXPOSE 80
+
+
